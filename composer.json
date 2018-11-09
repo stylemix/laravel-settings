@@ -1,0 +1,45 @@
+{
+  "name": "stylemix/laravel-settings",
+  "description": "Settings storage",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Azamat H",
+      "email": "azamat@stylemix.net"
+    }
+  ],
+  "autoload": {
+    "files": [
+      "src/helpers.php"
+    ],
+    "psr-4": {
+      "Stylemix\\Settings\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Stylemix\\Settings\\Test\\": "tests/"
+    }
+  },
+  "require": {
+    "illuminate/support": "5.*"
+  },
+  "require-dev": {
+    "laravel/framework": "5.*",
+    "phpunit/phpunit": ">=4.8, <6",
+    "mockery/mockery": "0.9.*"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Stylemix\\Settings\\ServiceProvider"
+      ],
+      "aliases": {
+        "Settings": "Stylemix\\Settings\\Facade"
+      }
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
