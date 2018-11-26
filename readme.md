@@ -1,17 +1,5 @@
 ### Installation
 
-In composer.json:
-```
-{
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "git@git.stylemix.net:azamatx/laravel-settings.git"
-    }
-  ]
-}
-```
-
 Require packages:
 ```bash
 composer require stylemix/laravel-settings
