@@ -18,11 +18,11 @@ class SettingsController extends Controller
     }
 
 
-    public function get()
+    public function get(Request $request)
     {
         $data = app(SettingsManager::class)->all();
 
-        return JsonResponse::create($data);
+        return JsonResponse::create(array_only($data, explode(',', $request->keys)));
     }
 
 }
