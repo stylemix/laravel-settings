@@ -34,7 +34,7 @@ class ServiceProvider extends BaseProvider
 
         $this->app->alias('Stylemix\Settings\SettingStore', 'setting');
 
-        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'settings');
+        $this->mergeConfigFrom(__DIR__ . '/../config/settings.php', 'settings');
     }
 
     /**
@@ -43,7 +43,7 @@ class ServiceProvider extends BaseProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '/../config/config.php' => config_path('settings.php')
+            __DIR__ . '/../config/settings.php' => config_path('settings.php')
         ], 'config');
 
         $this->publishes([

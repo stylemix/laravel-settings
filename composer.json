@@ -33,10 +33,11 @@
   "extra": {
     "laravel": {
       "providers": [
-        "Stylemix\\Settings\\ServiceProvider"
+        "Stylemix\\Settings\\ServiceProvider",
+        "Stylemix\\Settings\\ConfigMapperProvider"
       ],
       "aliases": {
-        "Settings": "Stylemix\\Settings\\Facade"
+        "Settings": "Stylemix\\Settings\\Facades\\Settings"
       }
     }
   },

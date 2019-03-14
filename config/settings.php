@@ -40,4 +40,7 @@ return [
 
     // Name of the table used.
     'table' => 'settings',
+
+	// List of setting keys to map into Laravel config
+	'config_mapping' => [],
 ];

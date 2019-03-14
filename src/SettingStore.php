@@ -3,6 +3,7 @@
 namespace Stylemix\Settings;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Config;
 
 abstract class SettingStore
 {
@@ -130,7 +131,38 @@ abstract class SettingStore
 
         $this->write($this->data);
         $this->unsaved = false;
-    }
+
+		if (!app()->runningUnitTests()) {
+			$this->writeToConfig();
+		}
+	}
+
+	/**
+	 * Write mapped to config values to bootstrap script
+	 */
+	protected function writeToConfig()
+	{
+		$config_keys = Config::get('settings.config_mapping');
+		$cache_file  = app()->bootstrapPath('cache/settings.php');
+
+		if (empty($config_keys)) {
+			if (file_exists($cache_file)) {
+				@unlink($cache_file);
+			}
+
+			return;
+		}
+
+		$config_data = [];
+		foreach ($config_keys as $key => $config) {
+			if (null !== ($value = $this->get($key))) {
+				$config_data[$config] = $value;
+			}
+		}
+
+		$output = "<?php\n\nreturn " . var_export($config_data, true) . ";" . \PHP_EOL;
+		@file_put_contents($cache_file, $output);
+	}
 
     /**
      * Make sure data is loaded.
