@@ -49,8 +49,6 @@ class ServiceProvider extends BaseProvider
         $this->publishes([
             __DIR__ . '/../migrations/create_settings_table.php' => database_path('migrations/' . date('Y_m_d_His') . '_create_settings_table.php')
         ], 'migrations');
-
-        $this->loadRoutesFrom(__DIR__ . '/routes.php');
     }
 
     /**

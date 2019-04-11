@@ -3,14 +3,14 @@
 namespace Stylemix\Settings\Facades;
 
 /**
- * @method mixed get($key, $default = null)
- * @method boolean has($key)
- * @method set($key, $value = null)
- * @method forget($key)
- * @method forgetAll()
- * @method array all()
- * @method save()
- * @method load($force = false)
+ * @method static mixed get($key, $default = null)
+ * @method static boolean has($key)
+ * @method static set($key, $value = null)
+ * @method static forget($key)
+ * @method static forgetAll()
+ * @method static array all()
+ * @method static save()
+ * @method static load($force = false)
  */
 class Settings extends \Illuminate\Support\Facades\Facade
 {
