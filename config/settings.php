@@ -41,6 +41,9 @@ return [
     // Name of the table used.
     'table' => 'settings',
 
+	// Restart queue workers when settings were changed
+	'queue_restart' => false,
+
 	// List of setting keys to map into Laravel config
 	'config_mapping' => [],
 ];

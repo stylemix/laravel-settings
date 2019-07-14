@@ -3,6 +3,7 @@
 namespace Stylemix\Settings;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 
 abstract class SettingStore
@@ -131,6 +132,24 @@ abstract class SettingStore
 
         $this->write($this->data);
         $this->unsaved = false;
+
+        // Force restart queue workers when settings were changed to
+		// make new setting values applied, since they are loaded once into memory
+		if (Config::get('settings.queue_restart')) {
+			try {
+				Artisan::queue('queue:restart');
+			}
+			catch (\Exception $e) {
+				report($e);
+			}
+
+			try {
+				Artisan::queue('horizon:terminate');
+			}
+			catch (\Exception $e) {
+				report($e);
+			}
+		}
 
 		if (!app()->runningUnitTests()) {
 			$this->writeToConfig();
