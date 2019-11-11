@@ -42,7 +42,7 @@ return [
     'table' => 'settings',
 
 	// Restart queue workers when settings were changed
-	'queue_restart' => false,
+	'queue_restart' => true,
 
 	// List of setting keys to map into Laravel config
 	'config_mapping' => [],

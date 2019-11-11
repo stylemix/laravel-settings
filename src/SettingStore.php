@@ -3,8 +3,9 @@
 namespace Stylemix\Settings;
 
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
+use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Console\Output\BufferedOutput;
 
 abstract class SettingStore
 {
@@ -133,26 +134,19 @@ abstract class SettingStore
         $this->write($this->data);
         $this->unsaved = false;
 
-        // Force restart queue workers when settings were changed to
-		// make new setting values applied, since they are loaded once into memory
-		if (Config::get('settings.queue_restart')) {
-			try {
-				Artisan::queue('queue:restart');
-			}
-			catch (\Exception $e) {
-				report($e);
-			}
-
-			try {
-				Artisan::queue('horizon:terminate');
-			}
-			catch (\Exception $e) {
-				report($e);
-			}
-		}
-
 		if (!app()->runningUnitTests()) {
 			$this->writeToConfig();
+
+			// Force restart queue workers when settings were changed to
+			// make new setting values applied, since they are loaded once into memory
+			if (Config::get('settings.queue_restart')) {
+				try {
+					$this->restartQueues();
+				}
+				catch (\Exception $e) {
+					report($e);
+				}
+			}
 		}
 	}
 
@@ -216,4 +210,30 @@ abstract class SettingStore
      * @return void
      */
     abstract protected function write(array $data);
+
+	/**
+	 * Restart queues workers (Horizon, Simple queue)
+	 */
+	public function restartQueues()
+	{
+		if (class_exists('Laravel\Horizon\Console\TerminateCommand')) {
+			$this->runConsoleCommand(\Laravel\Horizon\Console\TerminateCommand::class);
+		}
+
+		if (class_exists('Illuminate\Queue\Console\RestartCommand')) {
+			$this->runConsoleCommand(\Illuminate\Queue\Console\RestartCommand::class);
+		}
+	}
+
+	protected function runConsoleCommand($command)
+	{
+		$output = new BufferedOutput();
+		$cmd = app($command);
+		$cmd->setLaravel(app());
+		$code = $cmd->run(new StringInput(''), $output);
+
+		if ($code !== 0) {
+			throw new \RuntimeException($output->fetch());
+		}
+	}
 }
