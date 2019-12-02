@@ -217,6 +217,8 @@ abstract class SettingStore
 	public function restartQueues()
 	{
 		if (class_exists('Laravel\Horizon\Console\TerminateCommand')) {
+			// In some environments SIGTERM is not defined in PHP
+			defined('SIGTERM') || define('SIGTERM', 15);
 			$this->runConsoleCommand(\Laravel\Horizon\Console\TerminateCommand::class);
 		}
 
